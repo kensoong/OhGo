@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="static/img/icon.gif">
+
+    <title>Oh, the Places You'll Go!</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="static/css/oh.css" rel="stylesheet">
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+
+  </head>
+
+<body onload="load_funcs()"> 
+<nav class="navbar">
+    <div class="container">
+        <div class="navbar-header page-scroll">
+        	<!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"> -->
+        	<button type="button" class="navbar-toggle">
+                <i class="fa fa-bars"></i>
+		      </button>
+            	<div style="margin:0 auto;padding-left:15px;padding-right:10px;padding-top:10px;">
+            		<a href="/landing">
+            		<img id='logo' src="static/img/logo.png" alt="Oh logo">
+            		</a>
+        		</div>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="navbar-right navbar-element">
+            <ul class="nav navbar-nav">
+                <li class="page-scroll">
+                    <a href="/slides">Slides</a>
+                </li>
+                <li class="page-scroll">
+                    <a href="/ken">Author</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->            
+    </div>
+    <!-- /.container -->
+</nav>
+
+<div class="container" id="cities2">
+	<div class="text-center col-md-offset-1">
+		<h4>local attractions</h4>
+		<p>Click on a local attraction image to add it to your itinerary!</p>
+	</div>
+	<div class="col-md-12 col-xs-12">
+    <suggbox>
+      <suggs>
+        <div class="col-md-2 col-sm-4 col-xs-6">	
+          <img class="img-responsive" src="icon.gif" alt="" />
+          <h5>Media heading</h5>
+              <p>This is some sample text. This is some sample text.</p>
+        </div>
+      </suggs>
+    </suggbox>  	
+	</div>
+</div>
+
+<div class="container" id="media-container">
+	<div class="col-md-5 col-xs-6" id="cities1">
+		<div class="text-center">
+			<h4>itinerary</h4>
+      <h4 id="totaldrivetime" name="totaldrivetime"><center>Total driving time: </center></h4>
+      <h4 id="maplink" name="maplink"><center>Google Maps link: </center></h4>
+		</div>
+    <itinbox>
+      <itin>
+        <div class="media">
+           <a class="pull-left" href="#">
+              <img class="media-object" src="" alt="">
+           </a>
+           <div class="media-body">
+              <h5 class="media-heading">Let's get started!</h5>
+              <p>
+                  Click on any of the <i>images</i> above to add them to your itinerary.
+                  <br>Click the <i>names</i> for information.
+              </p>
+           </div>
+        </div>
+        </itin>
+    </itinbox>
+	</div>
+
+	
+  <div id="map-container" class="col-md-7"></div>
+</div>
+
+<br>
+<div class="container">
+  <p class="lead"><i>"You have brains in your head. You have feet in your shoes. You can steer yourself any direction you choose. You're on your own. And you know what you know. And YOU are the one who'll decide where to go..."</i>   -Dr. Seuss</p>
+</div>
+<br>
+<br>
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="static/js/jquery-1.11.0.min.js"></script>
+  <script src="static/js/bootstrap.min.js"></script>
+  <script>
+  var start = '{{origin}}';
+  var end = '{{destination}}';
+  var counter = 0;
+  var sitelist = []; 
+  var vctest;
+  var load_funcs = function() {
+      calcRoute([],1);
+      init_route_sugg();
+  }
+  
+  var init_route_sugg = function() {
+      cities = [];
+      var start = '{{origin}}';
+      var end = '{{destination}}';
+      var mrklist1 = [];
+      var mrklist2 = [];
+      jQuery.ajax(
+        'db_suggest/' + start + '&' + end,
+        {success:
+          function(data) {
+            cities = data.cities;
+            $("#cities2 suggs").remove();
+            for (i=0; i < cities.length; i++) {
+              if (cities[i]['url']!=[] && cities[i]['url']!=''){
+                $("#cities2 suggbox").append('<suggs><div class="col-md-2 col-sm-4 col-xs-6"><img onclick="add_landmark(' + cities[i]['City'] + ')" class="img-responsive" src="' + cities[i]['photo'] + '" alt="" /><h5><a href="' + String(cities[i]['url']) + '" target="_blank">' + cities[i]['CountryCode'] + '</a></h5><p>Additional drive time +' + cities[i]['dxi'] + ' minutes</p></div></suggs>');
+              } else {
+                $("#cities2 suggbox").append('<suggs><div class="col-md-2 col-sm-4 col-xs-6"><img onclick="add_landmark(' + cities[i]['City'] + ')" class="img-responsive" src="' + cities[i]['photo'] + '" alt="" /><h5>' + cities[i]['CountryCode'] + '</h5><p>Additional drive time +' + cities[i]['dxi'] + ' minutes</p></div></suggs>');
+              };
+              mrklist2.push(cities[i]['CountryCode']);
+              mrklist1.push([cities[i]['lat'],cities[i]['lng']]);
+            }
+          place_marker(mrklist1,mrklist2);
+          }
+        }
+      )
+      var start = "{{origin}}";
+      var end1 = "{{destination}}";
+      start = replaceAll(start," ","+");
+      end1 = replaceAll(end1," ","+");
+      document.getElementById('maplink').innerHTML = '<center><a href="https://www.google.com/maps/dir/' + start + '/' + end1 + '" target="_blank">Google Maps link</a></center>';
+  }
+  
+  function add_landmark(nid){
+    sitelist.push(nid);
+    query_for_cities()
+  };
+  
+  var query_for_cities = function() {
+    cities = [];
+    counter = counter + 1;
+    var vctest = sitelist;
+    var mrklist1 = [];
+    var mrklist2 = [];
+    var sumtime = 0;
+    jQuery.ajax(
+      'db_suggest/' + start + '&' + end + '&' + vctest,
+      {success:
+        function(data) {
+          cities = data.cities;
+          $("#cities2 suggs").remove();
+            for (i=0; i < cities.length; i++) {
+              if (cities[i]['url']!=[] && cities[i]['url']!=''){
+                $("#cities2 suggbox").append('<suggs><div class="col-md-2 col-sm-4 col-xs-6"><img onclick="add_landmark(' + cities[i]['City'] + ')" class="img-responsive" src="' + cities[i]['photo'] + '" alt="" /><h5><a href="' + String(cities[i]['url']) + '" target="_blank">' + cities[i]['CountryCode'] + '</a></h5><p>Additional drive time +' + cities[i]['dxi'] + ' minutes</p></div></suggs>');
+              } else {
+                $("#cities2 suggbox").append('<suggs><div class="col-md-2 col-sm-4 col-xs-6"><img onclick="add_landmark(' + cities[i]['City'] + ')" class="img-responsive" src="' + cities[i]['photo'] + '" alt="" /><h5>' + cities[i]['CountryCode'] + '</h5><p>Additional drive time +' + cities[i]['dxi'] + ' minutes</p></div></suggs>');
+              };
+              mrklist2.push(cities[i]['CountryCode']);
+              mrklist1.push([cities[i]['lat'],cities[i]['lng']]);
+            }
+          place_marker(mrklist1,mrklist2);
+        }
+      }
+    )
+    cities = [];
+    var latlng = '';
+    jQuery.ajax(
+      'db_path/'+ vctest,
+      {success:
+        function(data) {
+          cities = data.cities;
+          $("#cities1 itin").remove();
+          var numsite = 0;
+          for (i=0; i < cities.length; i++) {
+            numsite = numsite + 1;
+            $("#cities1 itinbox").append('<itin><div class="media"><a class="pull-left" href="#"><img class="media-object" src="' + cities[i]['photo'] + '" alt="..." /></a><div class="media-body"><h5 class="media-heading">' + cities[i]['CountryCode'] + '</h5><p><a href="' + cities[i]['url'] + '" target="_blank">' + cities[i]['url'] + '</a></p></div></div></itin>');
+            latlng = latlng + cities[i]['lat'] + ',' + cities[i]['lng'] + '+';
+          }
+          if(latlng !== ''){ latlng = latlng.substring(0, latlng.length - 1); };
+          calcRoute(latlng,1);
+          make_gmap_link(latlng);
+        }
+      }
+    )
+  }
+  
+  function replaceAll(instr, pattern, repl){
+    var instr2 = '';
+    while (instr != instr2){
+      instr2 = instr;
+      instr = instr.replace(pattern,repl);
+    };
+    return instr; 
+  };
+  
+  function make_gmap_link(latlng){
+    var start = "{{origin}}";
+    var end1 = "{{destination}}";
+    var latlng2wypt = replaceAll(latlng,"+","/")
+    latlng2wypt = replaceAll(latlng2wypt," ","+")
+    start = replaceAll(start," ","+");
+    end1 = replaceAll(end1," ","+");
+    var end1 = end;
+    if ({{roundtrip}}){ 
+        end1 = start;
+    };
+    document.getElementById('maplink').innerHTML = '<center><a href="https://www.google.com/maps/dir/' + start + '/' + latlng2wypt + '/' + end1 + '" target="_blank">Google Maps link</a></center>';  
+  };
+  
+  </script>
+  
+  <!-- load up google maps stuff -->
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+  <script>
+      var directionsDisplay;
+      var directionsService = new google.maps.DirectionsService();
+      var map;
+      var markers = [];
+      
+      var rendererOptions = {
+          map: map,
+          suppressMarkers : true
+        };
+                      
+      function initialize() {
+        directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+        var bayarea = new google.maps.LatLng(37.646940, -122.254390);
+        var mapOptions = {
+          zoom: 10,
+          center: bayarea
+        };
+        map = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+        directionsDisplay.setMap(map);       
+      };
+
+      function calcRoute(latlng) {
+        var start = '{{origin}}';
+        var end = '{{destination}}';
+        var waypts = [];
+        var wytxt = latlng
+        if (!(!wytxt || 0 === wytxt.length)) {
+          var locArray = latlng.split("+");
+          for (var i = 0; i < locArray.length; i++) {
+            waypts.push({
+                  location:locArray[i],
+                  stopover:true});
+          }
+        }
+    
+        // if round trip do this
+        var end1 = end;
+        if ({{roundtrip}}){
+            waypts.push({
+                      location:end,
+                      stopover:true});
+            end1 = start;
+        };
+        var request = {
+            origin: start,
+            destination: end1,
+            waypoints: waypts,
+            optimizeWaypoints: true,
+            travelMode: google.maps.TravelMode.DRIVING
+        };
+        
+        directionsService.route(request, function(response, status) {
+          if (status == google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(response);
+            
+            var route = response.routes[0];
+            var sumtime = 0;
+            for (var i = 0; i < route.legs.length; i++) {
+              var routeSegment = i + 1;
+              sumtime += route.legs[i].duration.value;
+            }
+            var sumtimehh = Math.floor(sumtime/3600);
+            var sumtimemm = Math.floor(sumtime/3600 % 1 * 60);
+            sumtimemm = ("0" + sumtimemm).slice(-2);
+            console.log(waypts);
+            document.getElementById('totaldrivetime').innerHTML = '<center>Total drive time: ' + sumtimehh + ':' + sumtimemm + '</center>';
+          }
+        });
+      }
+      
+      function place_marker(mrklist1,mrklist2) {
+        if (markers !== []) {clearMarkers();};
+        for (i = 0; i < mrklist1.length; i++) {  
+          var j = i+1
+          var iconstr = 'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=' + j + '|D63385|000000'
+          var myLatlng = new google.maps.LatLng(mrklist1[i][0], mrklist1[i][1]);
+          var marker = new google.maps.Marker({ 
+              position: myLatlng,
+              map: map,
+              title: mrklist2[i],
+              icon: iconstr           
+          });
+          markers.push(marker);
+        };
+      };
+      
+      function setAllMap(map) {
+        for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(map);
+        }
+      }
+
+      function clearMarkers() {
+        setAllMap(null);
+      }
+      
+      google.maps.event.addDomListener(window, 'load', initialize);
+
+  </script>
+</div>
+ 
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-54993456-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>
