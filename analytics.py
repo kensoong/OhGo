@@ -27,13 +27,13 @@ def distance_on_unit_sphere(lat1, long1, lat2, long2):
 def make_dist_vec(s1,e1,M=-1):
     # makes the distance vector given start and end point
     
-    mquest=mapquest()
-    s1latlng = mquest.revgeo(s1)
-    e1latlng = mquest.revgeo(e1)
-    
-    s1latlng = [float(s1latlng[0]),float(s1latlng[1])]
+    # passing in lat,lng coordinates
+    s1latlng = s1.split(',')
+    s1latlng = [float(s1latlng[0]),float(s1latlng[1])] 
+    e1latlng = e1.split(',')
     e1latlng = [float(e1latlng[0]),float(e1latlng[1])]
     
+    #print e1latlng
         
     if M==-1:
         conn = msc.mysqlcon()
@@ -88,7 +88,7 @@ def top5dist(mcn,dist,rrest,start1='Palo Alto, CA',end1='Stanford, CA',M=-1,nc=5
     dist_start, dist_end = make_dist_vec(start1,end1)
     dmat.append(dist_start)
     dmat.append(dist_end)
-    
+        
     dmat = np.array(dmat)
     
     # find closest points
@@ -175,7 +175,7 @@ def suggest(vin,origin,destination):
     vin = map(lambda x: int(x), vin)
   #top5, dxlist = top5dist(mcn,dist,vin,origin,destination)
   top5, dxlist = top5dist(mcn,dist,vin,origin,destination,-1,6)
-
+  
   #top5s = str(top5[0]) + ', ' + str(top5[1]) + ', ' + str(top5[2]) + ', ' + str(top5[3]) + ', ' + str(top5[4])
   top5s = str(top5[0]) + ', ' + str(top5[1]) + ', ' + str(top5[2]) + ', ' + str(top5[3]) + ', ' + str(top5[4]) + ', ' + str(top5[5]) # now top 6
   top5s = 'select nid, lat, lng, name, url, photo from foursquare join foursquare_id on foursquare.id=foursquare_id.id where nid in (%s) ORDER BY FIND_IN_SET(nid,"%s")' % (top5s,top5s)
@@ -187,8 +187,8 @@ def suggest(vin,origin,destination):
     
     # hours and minutes out of the way
     sf = 2 # scale factor
-    dxin = dxlist[res[0]]*sf
-    dxihm = '%02d:%02d' % (int(dxin/96500),int(dxin/96500 % 1 * 60)+3)
+    dxin = dxlist[res[0]]*sf+3
+    dxihm = '%02d:%02d' % (int(dxin/96500),int(dxin/96500 % 1 * 60))
     
     # distance out of the way (miles)
     #sf = 1 

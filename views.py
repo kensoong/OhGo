@@ -6,6 +6,7 @@ import re
 import analytics as ant
 import numpy as np
 import mysqlconnect as msc
+from mapquest_utils import *
 
 app = Flask(__name__)
 
@@ -20,13 +21,20 @@ def hello():
 # submit input and load itin picker    
 @app.route("/choose", methods=["POST","GET"])
 def testpost():
-    #print request.form
+
     origin = request.form["origin"]
     destination = request.form["destination"]
-    #roundtrip = request.form["roundtrip"]
     roundtrip = request.form.get('roundtrip')
     if not roundtrip:
         roundtrip = 0
+    
+    # do rev geo here
+    mquest=mapquest()
+    s1latlng = mquest.revgeo(origin)
+    e1latlng = mquest.revgeo(destination)
+    
+    origin = str(s1latlng[0]) + ',' + str(s1latlng[1])
+    destination = str(e1latlng[0]) + ',' + str(e1latlng[1])
     
     return render_template('index_map.html',origin=origin, destination=destination, roundtrip=roundtrip) 
 
