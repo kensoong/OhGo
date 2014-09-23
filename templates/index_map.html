@@ -139,9 +139,9 @@
             $("#cities2 suggs").remove();
             for (i=0; i < cities.length; i++) {
               if (cities[i]['url']!=[] && cities[i]['url']!=''){
-                $("#cities2 suggbox").append('<suggs><div class="col-md-2 col-sm-4 col-xs-6"><img onclick="add_landmark(' + cities[i]['City'] + ')" class="img-responsive" src="' + cities[i]['photo'] + '" alt="" /><h5><a href="' + String(cities[i]['url']) + '" target="_blank">'  + String(i+1) + '. ' + cities[i]['CountryCode'] + '</a></h5><p>Additional drive time +' + cities[i]['dxi'] + ' minutes</p></div></suggs>');
+                $("#cities2 suggbox").append('<suggs><div class="col-md-2 col-sm-4 col-xs-6"><img onclick="add_landmark(' + cities[i]['City'] + ')" class="img-responsive" src="' + cities[i]['photo'] + '" alt="" /><h5><a href="' + String(cities[i]['url']) + '" target="_blank">'  + String(i+1) + '.&nbsp;' + cities[i]['CountryCode'] + '</a></h5><p>Additional drive time +' + cities[i]['dxi'] + ' minutes</p></div></suggs>');
               } else {
-                $("#cities2 suggbox").append('<suggs><div class="col-md-2 col-sm-4 col-xs-6"><img onclick="add_landmark(' + cities[i]['City'] + ')" class="img-responsive" src="' + cities[i]['photo'] + '" alt="" /><h5>' + String(i+1) + '. ' + cities[i]['CountryCode'] + '</h5><p>Additional drive time +' + cities[i]['dxi'] + ' minutes</p></div></suggs>');
+                $("#cities2 suggbox").append('<suggs><div class="col-md-2 col-sm-4 col-xs-6"><img onclick="add_landmark(' + cities[i]['City'] + ')" class="img-responsive" src="' + cities[i]['photo'] + '" alt="" /><h5>' + String(i+1) + '.&nbsp;' + cities[i]['CountryCode'] + '</h5><p>Additional drive time +' + cities[i]['dxi'] + ' minutes</p></div></suggs>');
               };
               mrklist2.push(cities[i]['CountryCode']);
               mrklist1.push([cities[i]['lat'],cities[i]['lng']]);
@@ -181,9 +181,9 @@
           $("#cities2 suggs").remove();
             for (i=0; i < cities.length; i++) {
               if (cities[i]['url']!=[] && cities[i]['url']!=''){
-                $("#cities2 suggbox").append('<suggs><div class="col-md-2 col-sm-4 col-xs-6"><img onclick="add_landmark(' + cities[i]['City'] + ')" class="img-responsive" src="' + cities[i]['photo'] + '" alt="" /><h5><a href="' + String(cities[i]['url']) + '" target="_blank">' + String(i+1) + '. ' + cities[i]['CountryCode'] + '</a></h5><p>Additional drive time +' + cities[i]['dxi'] + ' minutes</p></div></suggs>');
+                $("#cities2 suggbox").append('<suggs><div class="col-md-2 col-sm-4 col-xs-6"><img onclick="add_landmark(' + cities[i]['City'] + ')" class="img-responsive" src="' + cities[i]['photo'] + '" alt="" /><h5><a href="' + String(cities[i]['url']) + '" target="_blank">' + String(i+1) + '.&nbsp;' + cities[i]['CountryCode'] + '</a></h5><p>Additional drive time +' + cities[i]['dxi'] + ' minutes</p></div></suggs>');
               } else {
-                $("#cities2 suggbox").append('<suggs><div class="col-md-2 col-sm-4 col-xs-6"><img onclick="add_landmark(' + cities[i]['City'] + ')" class="img-responsive" src="' + cities[i]['photo'] + '" alt="" /><h5>' + String(i+1) + '. ' + cities[i]['CountryCode'] + '</h5><p>Additional drive time +' + cities[i]['dxi'] + ' minutes</p></div></suggs>');
+                $("#cities2 suggbox").append('<suggs><div class="col-md-2 col-sm-4 col-xs-6"><img onclick="add_landmark(' + cities[i]['City'] + ')" class="img-responsive" src="' + cities[i]['photo'] + '" alt="" /><h5>' + String(i+1) + '.&nbsp;' + cities[i]['CountryCode'] + '</h5><p>Additional drive time +' + cities[i]['dxi'] + ' minutes</p></div></suggs>');
               };
               mrklist2.push(cities[i]['CountryCode']);
               mrklist1.push([cities[i]['lat'],cities[i]['lng']]);
@@ -308,7 +308,7 @@
             var sumtimehh = Math.floor(sumtime/3600);
             var sumtimemm = Math.floor(sumtime/3600 % 1 * 60);
             sumtimemm = ("0" + sumtimemm).slice(-2);
-            console.log(waypts);
+            //console.log(waypts);
             document.getElementById('totaldrivetime').innerHTML = '<center>Total drive time: ' + sumtimehh + ':' + sumtimemm + '</center>';
           }
         });
