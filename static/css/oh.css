@@ -81,18 +81,24 @@ p {color: #777777;
 .media{
 	padding-top:20px;
 }
+
 #cities1 {
     overflow-y:auto; 
     overflow-x:hidden; 
-   	height:500px;
-	
+   	height:400px;
+}
+
+.fixedH {
+    overflow-y:hidden; 
+    overflow-x:hidden; 
+   	height:30px;
 }
 
 .lighttext {
     color:#a4a4a4;
 }
 
-#map-container {height: 500px;
+#map-container {height: 400px;
 	float:right;
 }
 

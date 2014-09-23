@@ -23,7 +23,9 @@ def hello():
 def testpost():
 
     origin = request.form["origin"]
+    origin_name = origin
     destination = request.form["destination"]
+    destination_name = destination
     roundtrip = request.form.get('roundtrip')
     if not roundtrip:
         roundtrip = 0
@@ -36,7 +38,7 @@ def testpost():
     origin = str(s1latlng[0]) + ',' + str(s1latlng[1])
     destination = str(e1latlng[0]) + ',' + str(e1latlng[1])
     
-    return render_template('index_map.html',origin=origin, destination=destination, roundtrip=roundtrip) 
+    return render_template('index_map.html',origin=origin, destination=destination, roundtrip=roundtrip, origin_name=origin_name, destination_name=destination_name) 
 
 
 # return the current agenda

@@ -187,7 +187,7 @@ def suggest(vin,origin,destination):
     
     # hours and minutes out of the way
     sf = 2 # scale factor
-    dxin = dxlist[res[0]]*sf+3
+    dxin = dxlist[res[0]]*sf+5000
     dxihm = '%02d:%02d' % (int(dxin/96500),int(dxin/96500 % 1 * 60))
     
     # distance out of the way (miles)

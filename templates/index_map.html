@@ -58,8 +58,7 @@
 
 <div class="container" id="cities2">
 	<div class="text-center col-md-offset-1">
-		<h4>local attractions</h4>
-		<p>Click on a local attraction image to add it to your itinerary!</p>
+		<h4>Click on a local attraction image to add it to your itinerary!</h4>
 	</div>
 	<div class="col-md-12 col-xs-12">
     <suggbox>
@@ -77,9 +76,9 @@
 <div class="container" id="media-container">
 	<div class="col-md-5 col-xs-6" id="cities1">
 		<div class="text-center">
-			<h4>itinerary</h4>
+			<h4>your travel itinerary</h4>
       <h4 id="totaldrivetime" name="totaldrivetime"><center>Total driving time: </center></h4>
-      <h4 id="maplink" name="maplink"><center>Google Maps link: </center></h4>
+      <h4 id="maplink" name="maplink"><center>Google Maps directions</center></h4>
 		</div>
     <itinbox>
       <itin>
@@ -120,6 +119,7 @@
   var counter = 0;
   var sitelist = []; 
   var vctest;
+  var firstclick = 1;
   var load_funcs = function() {
       calcRoute([],1);
       init_route_sugg();
@@ -139,9 +139,9 @@
             $("#cities2 suggs").remove();
             for (i=0; i < cities.length; i++) {
               if (cities[i]['url']!=[] && cities[i]['url']!=''){
-                $("#cities2 suggbox").append('<suggs><div class="col-md-2 col-sm-4 col-xs-6"><img onclick="add_landmark(' + cities[i]['City'] + ')" class="img-responsive" src="' + cities[i]['photo'] + '" alt="" /><h5><a href="' + String(cities[i]['url']) + '" target="_blank">' + cities[i]['CountryCode'] + '</a></h5><p>Additional drive time +' + cities[i]['dxi'] + ' minutes</p></div></suggs>');
+                $("#cities2 suggbox").append('<suggs><div class="col-md-2 col-sm-4 col-xs-6"><img onclick="add_landmark(' + cities[i]['City'] + ')" class="img-responsive" src="' + cities[i]['photo'] + '" alt="" /><h5><a href="' + String(cities[i]['url']) + '" target="_blank">'  + String(i+1) + '. ' + cities[i]['CountryCode'] + '</a></h5><p>Additional drive time +' + cities[i]['dxi'] + ' minutes</p></div></suggs>');
               } else {
-                $("#cities2 suggbox").append('<suggs><div class="col-md-2 col-sm-4 col-xs-6"><img onclick="add_landmark(' + cities[i]['City'] + ')" class="img-responsive" src="' + cities[i]['photo'] + '" alt="" /><h5>' + cities[i]['CountryCode'] + '</h5><p>Additional drive time +' + cities[i]['dxi'] + ' minutes</p></div></suggs>');
+                $("#cities2 suggbox").append('<suggs><div class="col-md-2 col-sm-4 col-xs-6"><img onclick="add_landmark(' + cities[i]['City'] + ')" class="img-responsive" src="' + cities[i]['photo'] + '" alt="" /><h5>' + String(i+1) + '. ' + cities[i]['CountryCode'] + '</h5><p>Additional drive time +' + cities[i]['dxi'] + ' minutes</p></div></suggs>');
               };
               mrklist2.push(cities[i]['CountryCode']);
               mrklist1.push([cities[i]['lat'],cities[i]['lng']]);
@@ -160,6 +160,10 @@
   function add_landmark(nid){
     sitelist.push(nid);
     query_for_cities()
+    if (firstclick){
+      document.getElementById('cities2').scrollIntoView();
+    }
+    firstclick = 0;
   };
   
   var query_for_cities = function() {
@@ -177,9 +181,9 @@
           $("#cities2 suggs").remove();
             for (i=0; i < cities.length; i++) {
               if (cities[i]['url']!=[] && cities[i]['url']!=''){
-                $("#cities2 suggbox").append('<suggs><div class="col-md-2 col-sm-4 col-xs-6"><img onclick="add_landmark(' + cities[i]['City'] + ')" class="img-responsive" src="' + cities[i]['photo'] + '" alt="" /><h5><a href="' + String(cities[i]['url']) + '" target="_blank">' + cities[i]['CountryCode'] + '</a></h5><p>Additional drive time +' + cities[i]['dxi'] + ' minutes</p></div></suggs>');
+                $("#cities2 suggbox").append('<suggs><div class="col-md-2 col-sm-4 col-xs-6"><img onclick="add_landmark(' + cities[i]['City'] + ')" class="img-responsive" src="' + cities[i]['photo'] + '" alt="" /><h5><a href="' + String(cities[i]['url']) + '" target="_blank">' + String(i+1) + '. ' + cities[i]['CountryCode'] + '</a></h5><p>Additional drive time +' + cities[i]['dxi'] + ' minutes</p></div></suggs>');
               } else {
-                $("#cities2 suggbox").append('<suggs><div class="col-md-2 col-sm-4 col-xs-6"><img onclick="add_landmark(' + cities[i]['City'] + ')" class="img-responsive" src="' + cities[i]['photo'] + '" alt="" /><h5>' + cities[i]['CountryCode'] + '</h5><p>Additional drive time +' + cities[i]['dxi'] + ' minutes</p></div></suggs>');
+                $("#cities2 suggbox").append('<suggs><div class="col-md-2 col-sm-4 col-xs-6"><img onclick="add_landmark(' + cities[i]['City'] + ')" class="img-responsive" src="' + cities[i]['photo'] + '" alt="" /><h5>' + String(i+1) + '. ' + cities[i]['CountryCode'] + '</h5><p>Additional drive time +' + cities[i]['dxi'] + ' minutes</p></div></suggs>');
               };
               mrklist2.push(cities[i]['CountryCode']);
               mrklist1.push([cities[i]['lat'],cities[i]['lng']]);
@@ -196,12 +200,14 @@
         function(data) {
           cities = data.cities;
           $("#cities1 itin").remove();
+          $("#cities1 itinbox").append('<itin><div class="media"><a class="pull-left" href="#"><img class="media-object" src="" alt=""></a><div class="media-body"><h5 class="media-heading"><b>Starting at: {{origin_name}}</b></h5></div></div></itin>');
           var numsite = 0;
           for (i=0; i < cities.length; i++) {
             numsite = numsite + 1;
             $("#cities1 itinbox").append('<itin><div class="media"><a class="pull-left" href="#"><img class="media-object" src="' + cities[i]['photo'] + '" alt="..." /></a><div class="media-body"><h5 class="media-heading">' + cities[i]['CountryCode'] + '</h5><p><a href="' + cities[i]['url'] + '" target="_blank">' + cities[i]['url'] + '</a></p></div></div></itin>');
             latlng = latlng + cities[i]['lat'] + ',' + cities[i]['lng'] + '+';
           }
+          $("#cities1 itinbox").append('<itin><div class="media"><a class="pull-left" href="#"><img class="media-object" src="" alt=""></a><div class="media-body"><h5 class="media-heading"><b>Going to: {{destination_name}}</b></h5></div></div></itin>');
           if(latlng !== ''){ latlng = latlng.substring(0, latlng.length - 1); };
           calcRoute(latlng,1);
           make_gmap_link(latlng);
