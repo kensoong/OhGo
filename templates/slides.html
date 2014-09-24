@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="static/img/icon.gif">
+
+    <title>Oh, the Places You'll Go!</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="static/css/oh.css" rel="stylesheet">
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+
+  </head>
+
+<body onload="focusslide()"> 
+<nav class="navbar">
+    <div class="container">
+        <div class="navbar-header page-scroll">
+          <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"> -->
+          <button type="button" class="navbar-toggle">
+                <i class="fa fa-bars"></i>
+          </button>
+              <div style="margin:0 auto;padding-left:15px;padding-right:10px;padding-top:10px;">
+                <a href="/landing">
+                <img id='logo' src="static/img/logo.png" alt="Oh logo">
+                </a>
+            </div>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="navbar-right navbar-element">
+            <ul class="nav navbar-nav">
+                <li class="page-scroll">
+                    <a href="/slides">Slides</a>
+                </li>
+                <li class="page-scroll">
+                    <a href="/ken">Author</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->            
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+<div align="center" id="slide1">
+      <img src="static/img/slideshow/Slide1.JPG" width="65%" alt=""/> 
+</div>
+<br>
+<br>
+<div align="center" id="slide2">
+      <img src="static/img/slideshow/Slide2.JPG" width="65%" alt=""/> 
+</div>
+<br>
+<br>
+<div align="center" id="slide3">
+      <img src="static/img/slideshow/Slide3.JPG" width="65%" alt=""/> 
+</div>
+<br>
+<br>
+<div align="center" id="slide4">
+      <img src="static/img/slideshow/Slide4.JPG" width="65%" alt=""/> 
+</div>
+<br>
+<br>
+<div align="center" id="slide5">
+      <img src="static/img/slideshow/Slide5.JPG" width="65%" alt=""/> 
+</div>
+<br>
+<br>
+<div align="center" id="slide6">
+      <img src="static/img/slideshow/Slide6.JPG" width="65%" alt=""/> 
+</div>
+<br>
+<br>
+<div align="center" id="slide7">
+      <img src="static/img/slideshow/Slide7.JPG" width="65%" alt=""/> 
+</div>
+<br>
+<br>
+<div align="center" id="slide8">
+      <img src="static/img/slideshow/Slide8.JPG" width="65%" alt=""/> 
+</div>
+<br>
+<br>
+<div align="center" id="slide9">
+      <img src="static/img/slideshow/Slide9.JPG" width="65%" alt=""/> 
+</div>
+<br>
+<br>
+<div align="center" id="slide10">
+      <img src="static/img/slideshow/Slide10.JPG" width="65%" alt=""/> 
+</div>
+<br>
+<br>
+<div align="center" id="slide11">
+      <img src="static/img/slideshow/Slide11.JPG" width="65%" alt=""/> 
+</div>
+<br>
+<br>
+<div align="center" id="slide12">
+      <img src="static/img/slideshow/Slide12.JPG" width="65%" alt=""/> 
+</div>
+<br>
+<br>
+<div align="center" id="slide13">
+      <img src="static/img/slideshow/Slide13.JPG" width="65%" alt=""/> 
+</div>
+<br>
+<br>
+<div align="center" id="slide14">
+      <img src="static/img/slideshow/Slide14.JPG" width="65%" alt=""/> 
+</div>
+<br>
+<br>
+<div align="center" id="slide15">
+      <img src="static/img/slideshow/Slide15.JPG" width="65%" alt=""/> 
+</div>
+<br>
+<br>
+<div align="center" id="slide16">
+      <img src="static/img/slideshow/Slide16.JPG" width="65%" alt=""/> 
+</div>
+<br>
+<br>
+
+<script src="static/js/jquery-1.11.0.min.js"></script>
+<script src="static/js/bootstrap.min.js"></script>
+<script>
+var sliden = 1;
+
+var focusslide = function() {
+  document.getElementById('slide1').scrollIntoView();
+};
+
+$("body").keydown(function(e) {
+  if(e.keyCode == 37) { // left
+    if (sliden != 1){ 
+      sliden = sliden - 1;
+      var slidestr = 'slide'.concat(sliden);
+      console.log(slidestr)
+      document.getElementById(slidestr).scrollIntoView();
+    }
+  }
+  else if(e.keyCode == 39) { // right
+    if (sliden != 14){ 
+      sliden = sliden + 1;
+      var slidestr = 'slide'.concat(sliden);
+      document.getElementById(slidestr).scrollIntoView();
+    }
+  }
+});
+
+</script>
+</body>
+</html>

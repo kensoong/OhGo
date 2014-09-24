@@ -78,6 +78,10 @@ def sugg_json(vin):
     cities = ant.suggest(vsites,origin,destination)
     
     return jsonify(dict(cities=cities))    
+
+@app.route('/slides')
+def showslides(): 
+    return render_template('slides.html') 
     
 @app.route('/<pagename>') 
 def regularpage(pagename=None): 
