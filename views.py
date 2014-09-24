@@ -10,7 +10,7 @@ from mapquest_utils import *
 
 app = Flask(__name__)
 
-db = msc.mysqlcon()
+#db = msc.mysqlcon()
 
 @app.route("/")
 @app.route("/index")
@@ -45,6 +45,8 @@ def testpost():
 @app.route("/db_path/<vc>", methods=["GET"])
 def path_json(vc):
     
+    db = msc.mysqlcon()
+    
     cities = []
     vc = vc.split(',')
     for vci in vc:    
@@ -56,6 +58,8 @@ def path_json(vc):
         for result in query_results:
             nname = result[1].encode('ascii','ignore')
             cities.append( dict(City=unicode(str(result[0]), 'utf8'), CountryCode=nname, lat=result[2], lng=result[3], url=result[4], photo=result[5]) )
+    
+    db.close()
     
     return jsonify(dict(cities=cities))
 
@@ -81,12 +85,6 @@ def regularpage(pagename=None):
     Route not found by the other routes above. May point to a static template. 
     """ 
     return "You've arrived at " + pagename
-    db.query("SELECT Name, Name FROM Writers ORDER BY Name;")
-    query_results = db.store_result().fetch_row(maxrows=0)
-    return query_results
-    #if pagename==None: 
-    #    raise Exception, 'page_not_found' 
-    #return render_template(pagename) 
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
