@@ -6,7 +6,8 @@ import re
 import analytics as ant
 import numpy as np
 import mysqlconnect as msc
-from mapquest_utils import *
+#from mapquest_utils import *
+import urllib2
 
 app = Flask(__name__)
 
@@ -30,16 +31,27 @@ def testpost():
     if not roundtrip:
         roundtrip = 0
     
-    # do rev geo here
-    mquest=mapquest()
-    s1latlng = mquest.revgeo(origin)
-    e1latlng = mquest.revgeo(destination)
-    
-    origin = str(s1latlng[0]) + ',' + str(s1latlng[1])
-    destination = str(e1latlng[0]) + ',' + str(e1latlng[1])
-    
-    return render_template('index_map.html',origin=origin, destination=destination, roundtrip=roundtrip, origin_name=origin_name, destination_name=destination_name) 
+    # do geocode with mapquest
+    #mquest=mapquest()
+    #s1latlng = mquest.revgeo(origin)
+    #e1latlng = mquest.revgeo(destination)
+    #origin = str(s1latlng[0]) + ',' + str(s1latlng[1])
+    #destination = str(e1latlng[0]) + ',' + str(e1latlng[1])
 
+    # geocode with google
+    origin = urllib2.quote(origin)
+    geocode_url = "http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false&region=uk" % origin
+    req = urllib2.urlopen(geocode_url)
+    jsonResponse = json.loads(req.read())
+    origin = str(jsonResponse['results'][0]['geometry']['location']['lat']) + ',' + str(jsonResponse['results'][0]['geometry']['location']['lng'])
+
+    destination = urllib2.quote(destination)
+    geocode_url = "http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false&region=uk" % destination
+    req = urllib2.urlopen(geocode_url)
+    jsonResponse = json.loads(req.read())
+    destination = str(jsonResponse['results'][0]['geometry']['location']['lat']) + ',' + str(jsonResponse['results'][0]['geometry']['location']['lng'])
+
+    return render_template('index_map.html',origin=origin, destination=destination, roundtrip=roundtrip, origin_name=origin_name, destination_name=destination_name) 
 
 # return the current agenda
 @app.route("/db_path/<vc>", methods=["GET"])
