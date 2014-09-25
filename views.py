@@ -82,6 +82,10 @@ def sugg_json(vin):
 @app.route('/slides')
 def showslides(): 
     return render_template('slides.html') 
+
+@app.route('/ken')
+def ken(): 
+    return render_template('ken.html') 
     
 @app.route('/<pagename>') 
 def regularpage(pagename=None): 
