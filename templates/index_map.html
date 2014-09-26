@@ -234,9 +234,18 @@
     end1 = replaceAll(end1," ","+");
     var end1 = end;
     if ({{roundtrip}}){ 
-        //latlng2wypt = latlng2wypt.concat("/").concat(end1);
+        //latlng2wypt = latlng2wypt.concat("/").concat(end1); //use this to add the "end" point into gmap link
         end1 = start;
     };
+
+    // re-order the waypoints to optimize route
+    var wpt = latlng2wypt.split("/");
+    var orderedwpt = latlng2wypt.split("/");
+    for (index = 0; index < waypoint_order.length; index++) {
+      orderedwpt[index] = wpt[waypoint_order[index]];      
+    };
+    latlng2wypt = orderedwpt.join("/");
+
     document.getElementById('maplink').innerHTML = '<center><a href="https://www.google.com/maps/dir/' + start + '/' + latlng2wypt + '/' + end1 + '" target="_blank">Google Maps link</a></center>';  
   };
   
@@ -245,6 +254,7 @@
   <!-- load up google maps stuff -->
   <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
   <script>
+      var waypoint_order;
       var directionsDisplay;
       var directionsService = new google.maps.DirectionsService();
       var map;
@@ -301,6 +311,7 @@
             directionsDisplay.setDirections(response);
             
             var route = response.routes[0];
+            waypoint_order = route.waypoint_order;
             var sumtime = 0;
             for (var i = 0; i < route.legs.length; i++) {
               var routeSegment = i + 1;
@@ -309,7 +320,7 @@
             var sumtimehh = Math.floor(sumtime/3600);
             var sumtimemm = Math.floor(sumtime/3600 % 1 * 60);
             sumtimemm = ("0" + sumtimemm).slice(-2);
-            //console.log(waypts);
+            
             document.getElementById('totaldrivetime').innerHTML = '<center>Total drive time: ' + sumtimehh + ':' + sumtimemm + '</center>';
           }
         });
