@@ -39,19 +39,23 @@ def testpost():
     #destination = str(e1latlng[0]) + ',' + str(e1latlng[1])
 
     # geocode with google
-    origin = urllib2.quote(origin)
-    geocode_url = "http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false&region=uk" % origin
-    req = urllib2.urlopen(geocode_url)
-    jsonResponse = json.loads(req.read())
-    origin = str(jsonResponse['results'][0]['geometry']['location']['lat']) + ',' + str(jsonResponse['results'][0]['geometry']['location']['lng'])
+    try:
+      origin = urllib2.quote(origin)
+      geocode_url = "http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false&region=uk" % origin
+      req = urllib2.urlopen(geocode_url)
+      jsonResponse = json.loads(req.read())
+      origin = str(jsonResponse['results'][0]['geometry']['location']['lat']) + ',' + str(jsonResponse['results'][0]['geometry']['location']['lng'])
 
-    destination = urllib2.quote(destination)
-    geocode_url = "http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false&region=uk" % destination
-    req = urllib2.urlopen(geocode_url)
-    jsonResponse = json.loads(req.read())
-    destination = str(jsonResponse['results'][0]['geometry']['location']['lat']) + ',' + str(jsonResponse['results'][0]['geometry']['location']['lng'])
+      destination = urllib2.quote(destination)
+      geocode_url = "http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false&region=uk" % destination
+      req = urllib2.urlopen(geocode_url)
+      jsonResponse = json.loads(req.read())
+      destination = str(jsonResponse['results'][0]['geometry']['location']['lat']) + ',' + str(jsonResponse['results'][0]['geometry']['location']['lng'])
 
-    return render_template('index_map.html',origin=origin, destination=destination, roundtrip=roundtrip, origin_name=origin_name, destination_name=destination_name) 
+      return render_template('index_map.html',origin=origin, destination=destination, roundtrip=roundtrip, origin_name=origin_name, destination_name=destination_name) 
+
+    except:
+      return render_template('landing_error.html')
 
 # return the current agenda
 @app.route("/db_path/<vc>", methods=["GET"])

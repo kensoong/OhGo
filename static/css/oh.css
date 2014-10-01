@@ -98,6 +98,10 @@ p {color: #777777;
     color: #C774B7;
 }
 
+.errortext {
+    color: #CC0000;
+}
+
 #map-container {height: 400px;
 	float:right;
 }
