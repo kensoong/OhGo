@@ -322,6 +322,11 @@
             sumtimemm = ("0" + sumtimemm).slice(-2);
             
             document.getElementById('totaldrivetime').innerHTML = '<center>Total drive time: ' + sumtimehh + ':' + sumtimemm + '</center>';
+            if ({{roundtrip}}){
+            }
+            else{
+                make_gmap_link(latlng);
+            }
           }
         });
       }
